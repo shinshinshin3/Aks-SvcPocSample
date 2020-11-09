@@ -23,7 +23,7 @@
       "applicationUrl": "http://localhost:50002",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "dbConnectionString": "Server=localhost;Database=master;User ID=sa;Password=P@ssw0rd;initial catalog=dotnetsample;MultipleActiveResultSets=True;App=EntityFramework;",
+        "dbConnectionString": "Server=tcp:aks-poc-sv01.database.windows.net,1433;Initial Catalog=BeDatabase01;Persist Security Info=False;User ID=shinshin;Password=enj0yc!oud01;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
         "ApplicationInsights_InstrumentationKey": "8a86d23f-ecc4-4f0c-a78a-ca6ed18de4cb"
       }
     }

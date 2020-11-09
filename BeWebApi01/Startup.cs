@@ -25,13 +25,13 @@ namespace BeWebApi01
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             // Application Insightsへのログ出力設定
             //
             // NOTE: https://docs.microsoft.com/ja-jp/azure/azure-monitor/app/asp-net-core#configuration-recommendation-for-microsoftapplicationinsightsaspnetcore-sdk-2150--above
             // 
             //services.AddSingleton(typeof(ITelemetryChannel), new ServerTelemetryChannel() { StorageFolder = "/tmp/" });
             //var telemetryConfigutaion = new TelemetryClientConfigure(Configuration.GetValue<string>("ApplicationInsights_InstrumentationKey")).aiOptions;
-
 
 
             //services.AddApplicationInsightsTelemetry(telemetryConfigutaion);

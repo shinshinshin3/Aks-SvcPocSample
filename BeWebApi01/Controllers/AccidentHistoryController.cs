@@ -21,7 +21,7 @@ namespace BeWebApi01.Controllers
         private TelemetryClient _telemetryClient;
         private ILogger _logger;
 
-        public AccidentHistoryController(DatabaseContext context, IConfiguration configuraion, TelemetryClient telemetryClient, ILogger logger)
+        public AccidentHistoryController(DatabaseContext context, IConfiguration configuraion, TelemetryClient telemetryClient, ILogger<AccidentHistoryController> logger)
         {
             _context = context;
             _telemetryClient = telemetryClient;
@@ -39,7 +39,7 @@ namespace BeWebApi01.Controllers
                 //_context.Accident.AsNoTracking();
                 _context.accident.Add(Accident);
                 await _context.SaveChangesAsync();
-                _logger.LogInformation(String.Format("SQL Insert: {0}", Accident));
+                _logger.LogInformation(String.Format("SQL Insert: {0}", JsonConvert.SerializeObject(Accident)));
             }
             catch (Exception ex)
             {
