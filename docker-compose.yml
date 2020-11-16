@@ -49,6 +49,11 @@ services:
       BackEnd_URL: "http://beproxy/api/AccidentHistory"
       ApplicationInsights_InstrumentationKey: ""
       Log_Level: "Information"
+      KafkaExtension_MaxBatchSize: 128
+      KafkaExtension_SubscriberIntervalInSeconds: 1 
+      KafkaExtension_ExecutorChannelCapacity: 1
+      KafkaExtension_ChannelFullRetryIntervalInMs: 50
+      Librd_LibkafkaDebug: ""
     depends_on:
       - kafka
   beproxy:
@@ -65,7 +70,7 @@ services:
       context: .
       dockerfile: ./BeWebApi01/Dockerfile
     environment:
-      dbConnectionString: "Server=tcp:<dbserver fqdn>,1433;Initial Catalog=<database name>;Persist Security Info=False;User ID=<user>;Password=<password>;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+      dbConnectionString: "Server=dbxxxxx,1433;Initial Catalog=BeDatabase01;Persist Security Info=False;User ID=;Password=;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
       ApplicationInsights_InstrumentationKey: ""
       Log_Level: "Information"
 

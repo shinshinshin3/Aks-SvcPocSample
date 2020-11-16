@@ -7,6 +7,7 @@ using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
 using CommonLibrary.Logging;
 using Microsoft.Extensions.Logging;
+using GwWebApi01.Kafka;
 
 namespace GwWebApi01
 {
@@ -46,6 +47,14 @@ namespace GwWebApi01
             services = TelemetryClientConfigure.ConfigureServerTelemetryChannel(services, appInsightsKey);
             services = myILoggerProvider.Congfigure(services, appInsightsKey, logLevel);
 
+
+            // シングルトン化。connection refusedが発生した時の例外がハンドルできるかわからず、一旦コメントアウト。
+            /*
+            string brokerList = Configuration.GetValue<string>("BROKER_LIST");
+            string topic = Configuration.GetValue<string>("TOPIC");
+            services.AddSingleton(new MyKafkaProducer(brokerList, topic));
+            */
+            
             services.AddControllers()
             .AddNewtonsoftJson();
         }

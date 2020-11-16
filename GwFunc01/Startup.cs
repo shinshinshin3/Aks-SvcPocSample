@@ -7,6 +7,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.ApplicationInsights.Channel;
 using CommonLibrary.Logging;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
+using System;
 /* Server Telemetry Channel用
 using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
 using Microsoft.ApplicationInsights.Extensibility.Implementation.Tracing;
@@ -35,45 +37,40 @@ namespace AksPocSampleFunctions
                 .Build();
         }
 
+       
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            IWebJobsBuilder hBuilder = builder.Services.AddWebJobs(x => { return; });
-            hBuilder.AddKafka();
+            builder.Services.AddWebJobs(x => { return; }).AddKafka(
+                (KafkaOptions options) =>{
+                    options.MaxBatchSize = builder.GetContext().Configuration.GetValue<int>("KafkaExtension_MaxBatchSize");
+                    options.SubscriberIntervalInSeconds = builder.GetContext().Configuration.GetValue<int>("KafkaExtension_SubscriberIntervalInSeconds");
+                    options.ExecutorChannelCapacity = builder.GetContext().Configuration.GetValue<int>("KafkaExtension_ExecutorChannelCapacity");
+                    options.ChannelFullRetryIntervalInMs = builder.GetContext().Configuration.GetValue<int>("KafkaExtension_ChannelFullRetryIntervalInMs");
+                    if (!String.IsNullOrEmpty(builder.GetContext().Configuration.GetValue<string>("Librd_LibkafkaDebug")))
+                    {
+                        options.LibkafkaDebug = builder.GetContext().Configuration.GetValue<string>("Librd_LibkafkaDebug");
+                    }
+                });
 
             string appInsightsKey = builder.GetContext().Configuration.GetValue<string>("ApplicationInsights_InstrumentationKey");
             string logLevel = builder.GetContext().Configuration.GetValue<string>("Log_Level");
 
-            /* ILoggerの利用。Functionsでは成功していない。
-            builder.Services.AddLogging(loggingBuilder =>
-            {
-                //loggingBuilder.ClearProviders();
-                loggingBuilder.AddApplicationInsights(appInsightsKey);
-                loggingBuilder.AddConsole();                
-                loggingBuilder.AddFilter<Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider>("Category", LogLevel.Information);
-            }).BuildServiceProvider();
-            */
 
-            /*
-            Server TelemetryChannelで実装
-            builder.Services.AddSingleton(typeof(ITelemetryChannel),
-                                new ServerTelemetryChannel() { StorageFolder = "./" });
-            */
+            // IFunctionsConfigurationBuilderを別クラスのメソッドで初期化する。
+            // ServerTelemetryChannelにするとログがでない。
+            //builder = TelemetryClientConfigure.ConfigureFunctionsServerTelemetryChannel(builder, appInsightsKey);
+            builder = TelemetryClientConfigure.ConfigureFunctionsInMemoryTelemetryChannel(builder, appInsightsKey);
+            builder = myILoggerProvider.Congfigure(builder, appInsightsKey, logLevel);
+            
 
-            // InMemoryChannelで実装
-            builder.Services.AddSingleton(typeof(ITelemetryChannel), new InMemoryChannel() { MaxTelemetryBufferCapacity = 19898 });
-
-
-            var aiOptions = TelemetryClientConfigure.ConfigureServiceOptions(appInsightsKey);
-
-            /* IFunctionsConfigurationBuilderを別クラスのメソッドで初期化する。
-            //builder = TelemetryClientConfigure.ConfigureFunctionsInMemoryTelemetryChannel(builder, appInsightsKey);
-            //builder = myILoggerProvider.Congfigure(builder, appInsightsKey, logLevel);
-            */
-
-            builder.Services.AddApplicationInsightsTelemetry(aiOptions);
+            //builder.Services.AddApplicationInsightsTelemetry(aiOptions);
             builder.Services.AddSingleton<Functions>();
+
+            //worker service向け
             //builder.Services.AddApplicationInsightsTelemetryWorkerService(telemetryConfigutaion);
             builder.Services.BuildServiceProvider(true);
+
+  
         }
     }
 }

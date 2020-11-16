@@ -18,13 +18,13 @@ namespace AksPocSampleFunctions
         private HttpClient client = new HttpClient();
         private TelemetryClient _telemetryClient;
         private readonly IConfiguration _configuration;
-        //private ILogger _logger;
+        private ILogger _logger;
 
-        public Functions(IConfiguration configuration, TelemetryClient tc)
+        public Functions(IConfiguration configuration, TelemetryClient tc, ILogger<Functions> logger)
         {
             _configuration = configuration;
             _telemetryClient = tc;
-            //_logger = logger;
+            _logger = logger;
             //_logger.LogInformation("log start");
         }
 
@@ -38,8 +38,8 @@ namespace AksPocSampleFunctions
              */
             )
         {
-            _telemetryClient.TrackTrace("function start", SeverityLevel.Information);
-            //_logger.LogInformation("function start", SeverityLevel.Information);
+            //_telemetryClient.TrackTrace("function start", SeverityLevel.Information);
+            _logger.LogInformation("function start", SeverityLevel.Information);
 
             //var rets = new System.Collections.Generic.List<ConsumerResult>();
             foreach (var kafkaEvent in events)
@@ -65,15 +65,15 @@ namespace AksPocSampleFunctions
                     try
                     {
                         var jsonstr = JsonConvert.SerializeObject(i);
-                        //_logger.LogInformation(jsonstr);
-                        _telemetryClient.TrackTrace(jsonstr, SeverityLevel.Information);
+                        _logger.LogInformation(jsonstr);
+                        //_telemetryClient.TrackTrace(jsonstr, SeverityLevel.Information);
                         var content = new StringContent(jsonstr, Encoding.UTF8, "application/json");
                         var ret = await client.PostAsync(_configuration.GetValue<string>("BackEnd_URL"), content);
                     }
                     catch (Exception ex)
                     {
                         _telemetryClient.TrackTrace(ex.Message, SeverityLevel.Error);
-                        //_logger.LogError(ex.Message);
+                        _logger.LogError(ex.Message);
                     }
                 }
             }
