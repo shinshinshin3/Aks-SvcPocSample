@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aks-pocsvc-gwweb
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: aks-pocsvc-gwweb
+  template:
+    metadata:
+      labels:
+        app: aks-pocsvc-gwweb
+        aadpodidbinding: aks-poc-pod-identity-selector
+    spec:
+      containers:
+      - name: aks-pocsvc-gwweb
+        image: funcregistry.azurecr.io/aks_pocsvc_gwwebapi:latest
+        resources:
+          requests:
+            cpu: 300m
+            memory: 1024Mi
+          limits:
+            cpu: 1000m
+            memory: 2048Mi
+        ports:
+        - containerPort: 80
+        env:
+        - name: BROKER_LIST
+          value: 10.0.1.5:9092
+        - name: TOPIC
+          value: accident
+        - name: ApplicationInsights_InstrumentationKey
+          valueFrom:
+            secretKeyRef:
+              name: aks-func-keyvault
+              key: ApplicationInsightsInstrumentationKey
+        - name: Log_Level
+          value: Information
+        volumeMounts:
+        - name: secrets-store-inline
+          mountPath: "/mnt/secrets-store"
+          readOnly: true
+      volumes:
+        - name: secrets-store-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "aks-poc-secret-provider"
+        # readinessProbe:
+        #   httpGet:
+        #     port: 80
+        #     path: /api/todoItems
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aks-pocsvc-gwweb
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+  selector:
+    app: aks-pocsvc-gwweb
+

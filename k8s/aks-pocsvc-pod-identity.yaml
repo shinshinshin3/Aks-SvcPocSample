@@ -1,0 +1,17 @@
+apiVersion: aadpodidentity.k8s.io/v1
+kind: AzureIdentity
+metadata:
+    name: "aks-poc-pod-identity"
+spec:
+    type: 0
+    resourceID: /subscriptions/925a5d1******************
+    25cb5304/resourceGroups/aks-func-poc/providers/Microsoft.ManagedIdentity/userAssignedIdentities/aks-poc-pod-identity
+    clientID: "c6721*************68f5bd"
+---
+apiVersion: aadpodidentity.k8s.io/v1
+kind: AzureIdentityBinding
+metadata:
+    name: aks-poc-pod-identity-binding
+spec:
+    azureIdentity: "aks-poc-pod-identity"
+    selector: aks-poc-pod-identity-selector

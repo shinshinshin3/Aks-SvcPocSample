@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aks-pocsvc-beweb-nginx-conf
+data:
+  nginx.conf: |-
+    user  nginx;
+    worker_processes  1;
+
+    error_log  /var/log/nginx/error.log warn;
+    pid        /var/run/nginx.pid;
+
+    events {
+        worker_connections  1024;
+    }
+
+    http {
+        default_type  application/octet-stream;
+
+        sendfile        on;
+        keepalive_timeout  65;
+
+        upstream aks-pocsvc-beapp {
+            server aks-pocsvc-beapp;
+        }
+
+        server {
+            listen 80;
+
+            location / {
+                proxy_pass         http://aks-pocsvc-beapp;
+                proxy_redirect     off;
+            }
+        }
+    }

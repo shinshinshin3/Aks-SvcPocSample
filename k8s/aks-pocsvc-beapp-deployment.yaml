@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aks-pocsvc-beapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aks-pocsvc-beapp
+  template:
+    metadata:
+      labels:
+        app: aks-pocsvc-beapp
+        aadpodidbinding: aks-poc-pod-identity-selector
+    spec:
+      containers:
+      - name: aks-pocsvc-beapp
+        image: funcregistry.azurecr.io/aks_pocsvc_bewebapi:latest
+        resources:
+          requests:
+            cpu: 100m
+            memory: 1024Mi
+          limits:
+            cpu: 500m
+            memory: 1024Mi
+        ports:
+        - containerPort: 80
+        env:
+        - name: dbConnectionString
+          valueFrom:
+            secretKeyRef:
+              name: aks-func-keyvault
+              key: dbConnectionString
+        - name: ApplicationInsights_InstrumentationKey
+          valueFrom:
+            secretKeyRef:
+              name: aks-func-keyvault
+              key: ApplicationInsightsInstrumentationKey
+        - name: Log_Level
+          value: Information
+        volumeMounts:
+        - name: secrets-store-inline
+          mountPath: "/mnt/secrets-store"
+          readOnly: true
+      volumes:
+        - name: secrets-store-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "aks-poc-secret-provider"
+
+        # readinessProbe:
+        #   httpGet:
+        #     port: 80
+        #     path: /api/todoItems
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aks-pocsvc-beapp
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+  selector:
+    app: aks-pocsvc-beapp
+

@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aks-pocsvc-beweb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aks-pocsvc-beweb
+  template:
+    metadata:
+      labels:
+        app: aks-pocsvc-beweb
+    spec:
+      containers:
+      - name: aks-pocsvc-beweb
+        image: nginx:1.19.4-alpine
+        resources:
+          requests:
+            cpu: 100m
+            memory: 512Mi
+          limits:
+            cpu: 300m
+            memory: 512Mi
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: nginx-conf
+          mountPath: /etc/nginx/
+      volumes:
+      - name: nginx-conf
+        configMap: 
+          name: aks-pocsvc-beweb-nginx-conf
+          items:
+            - key: nginx.conf
+              path: nginx.conf
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aks-pocsvc-beweb
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+  selector:
+    app: aks-pocsvc-beweb
+
