@@ -42,6 +42,8 @@ namespace AksPocSampleFunctions
             _logger.LogInformation("function start", SeverityLevel.Information);
 
             //var rets = new System.Collections.Generic.List<ConsumerResult>();
+                
+            _logger.LogInformation("KafkaEventData.Length: {0}", events.Length);
             foreach (var kafkaEvent in events)
             {
                 var topicData = JsonConvert.DeserializeObject<RootObject>(kafkaEvent.Value);
@@ -72,7 +74,7 @@ namespace AksPocSampleFunctions
                     }
                     catch (Exception ex)
                     {
-                        _telemetryClient.TrackTrace(ex.Message, SeverityLevel.Error);
+                        //_telemetryClient.TrackTrace(ex.Message, SeverityLevel.Error);
                         _logger.LogError(ex.Message);
                     }
                 }
