@@ -1,0 +1,41 @@
+﻿<Properties StartupConfiguration="{648F584C-70EC-4A76-9317-9F7F118DF2F9}|Default">
+  <MonoDevelop.Ide.ItemProperties.GwClient01 PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="BeWebApi01/Controllers/AccidentHistoryController.cs">
+    <Files>
+      <File FileName="TimerFunc01/Functions.cs" Line="5" Column="1" />
+      <File FileName="GwClient02/Program.cs" Line="103" Column="1" />
+      <File FileName="BeWebApi01/DbContext/DbContext.cs" Line="1" Column="1" />
+      <File FileName="BeWebApi01/Controllers/AccidentHistoryController.cs" Line="37" Column="16" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="Aks-SvcPocSample" expanded="True">
+            <Node name="BeWebApi01" expanded="True">
+              <Node name="Controllers" expanded="True">
+                <Node name="AccidentHistoryController.cs" selected="True" />
+              </Node>
+              <Node name="DbContext" expanded="True" />
+            </Node>
+            <Node name="GwFunc01" expanded="True" />
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.GwClient02 PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <DisabledProjects>
+    <String>StorageClient/StorageClient.csproj</String>
+  </DisabledProjects>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.GwFunc01 PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.GwWebApi01 PreferredExecutionTarget="/Applications/Safari.app" />
+</Properties>

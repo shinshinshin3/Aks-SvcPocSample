@@ -1,0 +1,117 @@
+version: '3.4'
+
+services:
+  gwproxy:
+    build:
+      context: ./nginx-docker
+    environment:
+      BACKEND_HOST: "gwwebapi:80"
+      WORKER_PROCESSES: "1"
+      WORKER_CONNECTIONS: "1024"
+    ports: 
+      - "80:80"
+    depends_on:
+      - gwwebapi
+  gwwebapi:
+    build:
+      context: .
+      dockerfile: ./GwWebApi01/Dockerfile
+    environment:
+      BROKER_LIST: "kafka:9092"
+      TOPIC_ACCIDENT: "accident1"
+      TOPIC_LOCATION: "location"
+      ApplicationInsights_InstrumentationKey: "a0f31c58-6bb2-46f7-90fd-cf910f3d90d8"
+      Log_Level: "Information"
+    depends_on:
+      - kafka
+  kafka:
+    build: ./kafka-docker
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: ${DOCKERHOST:-0.0.0.0}
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_DELETE_TOPIC_ENABLE: "true"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
+  gwfunction_a:
+    build:
+      context: .
+      dockerfile: ./GwFunc01/Dockerfile
+    environment:
+      LD_LIBRARY_PATH: "/home/site/wwwroot/bin/runtimes/linux-x64/native"
+      BROKER_LIST: "kafka:9092"
+      TOPIC: "accident1"
+      CONSUMER_GROUP: "GwFunction"
+      BackEnd_URL: "http://beproxy/api/AccidentHistory"
+      ApplicationInsights_InstrumentationKey: "a0f31c58-6bb2-46f7-90fd-cf910f3d90d8"
+      Log_Level: "Information"
+      KafkaExtension_MaxBatchSize: 128
+      KafkaExtension_SubscriberIntervalInSeconds: 1 
+      KafkaExtension_ExecutorChannelCapacity: 1
+      KafkaExtension_ChannelFullRetryIntervalInMs: 50
+      Librd_LibkafkaDebug: ""
+    depends_on:
+      - kafka
+  gwfunction_l:
+    build:
+      context: .
+      dockerfile: ./GwFunc01/Dockerfile
+    environment:
+      LD_LIBRARY_PATH: "/home/site/wwwroot/bin/runtimes/linux-x64/native"
+      BROKER_LIST: "kafka:9092"
+      TOPIC: "location"
+      CONSUMER_GROUP: "GwFunction"
+      BackEnd_URL: "http://beproxy/api/AccidentHistory"
+      ApplicationInsights_InstrumentationKey: "a0f31c58-6bb2-46f7-90fd-cf910f3d90d8"
+      Log_Level: "Degbug"
+      KafkaExtension_MaxBatchSize: 128
+      KafkaExtension_SubscriberIntervalInSeconds: 1
+      KafkaExtension_ExecutorChannelCapacity: 1
+      KafkaExtension_ChannelFullRetryIntervalInMs: 50
+      Librd_LibkafkaDebug: ""
+      BLOB_CONNECTIONSTRING: "DefaultEndpointsProtocol=https;AccountName=aksfuncpoc;AccountKey=jZYHvpJbypmlSGbjEep585o5JTiOgmP7k5QHbPiwGi/DYVI/onwJyD+v4pG+t0gLA8dvZMPuPwdPvwWRa7O+RQ==;EndpointSuffix=core.windows.net"
+      BLOB_ContainerName: "location"
+      Queue_CONNECTIONSTRING: "DefaultEndpointsProtocol=https;AccountName=aksfuncpoc;AccountKey=jZYHvpJbypmlSGbjEep585o5JTiOgmP7k5QHbPiwGi/DYVI/onwJyD+v4pG+t0gLA8dvZMPuPwdPvwWRa7O+RQ==;EndpointSuffix=core.windows.net"
+      Queue_Name: "location"
+    depends_on:
+      - kafka
+  queuefunction:
+    build:
+      context: .
+      dockerfile: ./QueueFunc01/Dockerfile
+    environment:
+      ApplicationInsights_InstrumentationKey: "a0f31c58-6bb2-46f7-90fd-cf910f3d90d8"
+      Log_Level: "Debug"
+      DB_AADEnabled: "false"
+      DB_ConnectionString: "Server=tcp:aks-poc-sqlserver.database.windows.net,1433;Initial Catalog=aks-poc-sqlserver;Persist Security Info=False;User ID=pocuser;Password=P@ssword;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+      ApplicationInsights_InstrumentationKey: "a0f31c58-6bb2-46f7-90fd-cf910f3d90d8"
+      Log_Level: "Debug"
+      Queue_CONNECTIONSTRING: "DefaultEndpointsProtocol=https;AccountName=aksfuncpoc;AccountKey=jZYHvpJbypmlSGbjEep585o5JTiOgmP7k5QHbPiwGi/DYVI/onwJyD+v4pG+t0gLA8dvZMPuPwdPvwWRa7O+RQ==;EndpointSuffix=core.windows.net"
+      Queue_Name: "location"
+  beproxy:
+    build:
+      context: ./nginx-docker
+    environment:
+      BACKEND_HOST: "bewebapi:80"
+      WORKER_PROCESSES: "1"
+      WORKER_CONNECTIONS: "1024"
+    depends_on:
+      - bewebapi
+  bewebapi:
+    build:
+      context: .
+      dockerfile: ./BeWebApi01/Dockerfile
+    environment:
+      DB_AADEnabled: "false"
+      dbConnectionString: "Server=tcp:aks-poc-sqlserver.database.windows.net,1433;Initial Catalog=aks-poc-sqlserver;Persist Security Info=False;User ID=pocuser;Password=P@ssword;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+      ApplicationInsights_InstrumentationKey: "a0f31c58-6bb2-46f7-90fd-cf910f3d90d8"
+      Log_Level: "Information"
+
+networks:
+  default:
+    name: aks-poc-net1

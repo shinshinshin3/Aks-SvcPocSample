@@ -13,6 +13,46 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.9" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\Microsoft.Extensions.Logging.ApplicationInsights.dll" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\Microsoft.Win32.SystemEvents.dll" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\NCrontab.Signed.dll" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\System.CodeDom.dll" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\System.Drawing.Common.dll" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\runtimes\linux-x64\native\debian9-librdkafka.so" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\runtimes\osx-x64\native\librdkafka.dylib" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\runtimes\win-x64\native\librdkafka.dll" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\runtimes\linux-x64\native\centos7-librdkafka.so" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\runtimes\win-x64\native\librdkafkacpp.dll" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\Microsoft.WindowsAzure.Storage.dll" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\runtimes\linux-x64\native\librdkafka.so" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\runtimes\linux-x64\native\alpine-librdkafka.so" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\System.Windows.Extensions.dll" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\runtimes\win-x64\native\msvcp120.dll" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\runtimes\win-x64\native\libzstd.dll" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\runtimes\win-x64\native\msvcr120.dll" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\runtimes\win-x86\native\librdkafka.dll" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\runtimes\win-x64\native\zlib.dll" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\runtimes\win-x86\native\librdkafkacpp.dll" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\runtimes\win-x86\native\libzstd.dll" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\runtimes\win-x86\native\msvcp120.dll" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\runtimes\win-x86\native\msvcr120.dll" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\runtimes\win-x86\native\zlib.dll" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\runtimes\win\lib\netcoreapp3.0\Microsoft.Win32.SystemEvents.dll" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\runtimes\win\lib\netcoreapp2.0\System.Diagnostics.PerformanceCounter.dll" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\runtimes\win\lib\netcoreapp3.0\System.Windows.Extensions.dll" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\cacert.pem" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\CommonLibrary.dll" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\function.deps.json" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\CommonLibrary.pdb" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\GwFunc01.dll" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\GwFunc01.pdb" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\Functions\function.json" />
+    <None Remove="obj\Release\netcoreapp3.1\PubTmp\Out\bin\extensions.json" />
+  </ItemGroup>
+  <ItemGroup>
     <None Update="host.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

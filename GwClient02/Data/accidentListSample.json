@@ -1,0 +1,86 @@
+﻿{
+  "dateTime": "2020-10-29-02:26",
+  "countryCode": "TC",
+  "accidents": [
+    {
+      "occurenceDate": "2020-10-24-19:50",
+      "transactionId": "",
+      "vehicleId": "7263",
+      "address": "16692 Canal Street",
+      "city": "Wilmington",
+      "message": ""
+    },
+    {
+      "occurenceDate": "2020-10-26-22:39",
+      "transactionId": "",
+      "vehicleId": "6803",
+      "address": "46077 Hinton Road",
+      "city": "Wellington",
+      "message": ""
+    },
+    {
+      "occurenceDate": "2020-10-23-05:07",
+      "transactionId": "",
+      "vehicleId": "10139",
+      "address": "22520 Glendale Road",
+      "city": "Newcastle",
+      "message": ""
+    },
+    {
+      "occurenceDate": "2020-10-26-22:57",
+      "transactionId": "",
+      "vehicleId": "14602",
+      "address": "28917 Robinson Street",
+      "city": "Irvine",
+      "message": ""
+    },
+    {
+      "occurenceDate": "2020-10-23-20:24",
+      "transactionId": "",
+      "vehicleId": "13146",
+      "address": "48921 Arlington Road",
+      "city": "Aspen",
+      "message": ""
+    },
+    {
+      "occurenceDate": "2020-10-26-07:41",
+      "transactionId": "",
+      "vehicleId": "8652",
+      "address": "11532 Hudson Street",
+      "city": "Albany",
+      "message": ""
+    },
+    {
+      "occurenceDate": "2020-10-23-16:04",
+      "transactionId": "",
+      "vehicleId": "4785",
+      "address": "933 Haredale Road",
+      "city": "Plymouth",
+      "message": ""
+    },
+    {
+      "occurenceDate": "2020-10-27-13:50",
+      "transactionId": "",
+      "vehicleId": "7583",
+      "address": "29038 Rutherford Street",
+      "city": "Auckland",
+      "message": ""
+    },
+    {
+      "occurenceDate": "2020-10-27-16:12",
+      "transactionId": "",
+      "vehicleId": "5002",
+      "address": "12234 Brook Street",
+      "city": "Palmerston",
+      "message": ""
+    },
+    {
+      "occurenceDate": "2020-10-27-15:24",
+      "transactionId": "",
+      "vehicleId": "13578",
+      "address": "34708 Seaside Drive",
+      "city": "Sheffield",
+      "message": ""
+    }
+  ]
+}

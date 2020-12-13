@@ -13,6 +13,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeWebApi01", "BeWebApi01\Be
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLibrary", "CommonLibrary\CommonLibrary.csproj", "{1AAD81B6-A60F-4D80-9570-39EACA3140D9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueueFunc01", "QueueFunc01\QueueFunc01.csproj", "{7AF8DD93-8664-4FD2-BD66-4F7538B25CF8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimerFunc01", "TimerFunc01\TimerFunc01.csproj", "{5FD51415-4E6C-46BF-85FF-62CC15984C38}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GwClient02", "GwClient02\GwClient02.csproj", "{648F584C-70EC-4A76-9317-9F7F118DF2F9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,5 +49,17 @@ Global
 		{1AAD81B6-A60F-4D80-9570-39EACA3140D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1AAD81B6-A60F-4D80-9570-39EACA3140D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1AAD81B6-A60F-4D80-9570-39EACA3140D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AF8DD93-8664-4FD2-BD66-4F7538B25CF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AF8DD93-8664-4FD2-BD66-4F7538B25CF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AF8DD93-8664-4FD2-BD66-4F7538B25CF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AF8DD93-8664-4FD2-BD66-4F7538B25CF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FD51415-4E6C-46BF-85FF-62CC15984C38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FD51415-4E6C-46BF-85FF-62CC15984C38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FD51415-4E6C-46BF-85FF-62CC15984C38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FD51415-4E6C-46BF-85FF-62CC15984C38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{648F584C-70EC-4A76-9317-9F7F118DF2F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{648F584C-70EC-4A76-9317-9F7F118DF2F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{648F584C-70EC-4A76-9317-9F7F118DF2F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{648F584C-70EC-4A76-9317-9F7F118DF2F9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

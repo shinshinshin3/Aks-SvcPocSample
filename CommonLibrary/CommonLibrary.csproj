@@ -7,6 +7,7 @@
   <ItemGroup>
     <Folder Include="Models\" />
     <Folder Include="Logging\" />
+    <Folder Include="Storage\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.15.0" />
@@ -15,5 +16,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.9" />
     <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.9" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.7.0" />
+    <PackageReference Include="Azure.Storage.Queues" Version="12.5.0" />
   </ItemGroup>
 </Project>

@@ -1,0 +1,87 @@
+networks:
+  default:
+    name: aks-poc-net1
+services:
+  beproxy:
+    build:
+      context: /Users/shindo/Project/Aks-SvcPocSample/nginx-docker
+    depends_on:
+      bewebapi:
+        condition: service_started
+    environment:
+      BACKEND_HOST: bewebapi:80
+      WORKER_CONNECTIONS: '1024'
+      WORKER_PROCESSES: '1'
+  bewebapi:
+    build:
+      context: /Users/shindo/Project/Aks-SvcPocSample
+      dockerfile: ./BeWebApi01/Dockerfile
+    environment:
+      ApplicationInsights_InstrumentationKey: ''
+      Log_Level: Information
+      dbConnectionString: Server=dbxxxxx,1433;Initial Catalog=BeDatabase01;Persist
+        Security Info=False;User ID=;Password=;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection
+        Timeout=30;
+  gwfunction:
+    build:
+      context: /Users/shindo/Project/Aks-SvcPocSample
+      dockerfile: ./GwFunc01/Dockerfile
+    depends_on:
+      kafka:
+        condition: service_started
+    environment:
+      ApplicationInsights_InstrumentationKey: ''
+      BROKER_LIST: kafka:9092
+      BackEnd_URL: http://beproxy/api/AccidentHistory
+      CONSUMER_GROUP: GwFunction
+      KafkaExtension_ChannelFullRetryIntervalInMs: 50
+      KafkaExtension_ExecutorChannelCapacity: 1
+      KafkaExtension_MaxBatchSize: 128
+      KafkaExtension_SubscriberIntervalInSeconds: 1
+      LD_LIBRARY_PATH: /home/site/wwwroot/bin/runtimes/linux-x64/native
+      Librd_LibkafkaDebug: ''
+      Log_Level: Information
+      TOPIC: accident1
+  gwproxy:
+    build:
+      context: /Users/shindo/Project/Aks-SvcPocSample/nginx-docker
+    depends_on:
+      gwwebapi:
+        condition: service_started
+    environment:
+      BACKEND_HOST: gwwebapi:80
+      WORKER_CONNECTIONS: '1024'
+      WORKER_PROCESSES: '1'
+    ports:
+    - published: 80
+      target: 80
+  gwwebapi:
+    build:
+      context: /Users/shindo/Project/Aks-SvcPocSample
+      dockerfile: ./GwWebApi01/Dockerfile
+    depends_on:
+      kafka:
+        condition: service_started
+    environment:
+      ApplicationInsights_InstrumentationKey: ''
+      BROKER_LIST: kafka:9092
+      Log_Level: Information
+      TOPIC: accident1
+  kafka:
+    build:
+      context: /Users/shindo/Project/Aks-SvcPocSample/kafka-docker
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 0.0.0.0
+      KAFKA_DELETE_TOPIC_ENABLE: "true"
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    ports:
+    - published: 9092
+      target: 9092
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock:rw
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+    - published: 2181
+      target: 2181
+version: '3.4'

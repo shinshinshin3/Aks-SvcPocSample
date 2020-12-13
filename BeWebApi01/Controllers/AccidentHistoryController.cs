@@ -33,18 +33,19 @@ namespace BeWebApi01.Controllers
         [HttpPost]
         public async Task<StatusCodeResult> Post([FromBody] Accident Accident)
         {
-            _telemetryClient.TrackTrace(JsonConvert.SerializeObject(Accident));
+            //_telemetryClient.TrackTrace(JsonConvert.SerializeObject(Accident));
             try
             {
                 //_context.Accident.AsNoTracking();
+                _logger.LogDebug("Accident Recieve: {0}", Accident, LogLevel.Debug);
                 _context.accident.Add(Accident);
                 await _context.SaveChangesAsync();
-                _logger.LogInformation(String.Format("SQL Insert: {0}", JsonConvert.SerializeObject(Accident)));
+                _logger.LogInformation(String.Format("SQL Insert: {0}", JsonConvert.SerializeObject(Accident)), LogLevel.Information);
             }
             catch (Exception ex)
             {
                 //_telemetryClient.TrackTrace(ex.Message);
-                _logger.LogError(ex.Message);
+                _logger.LogError(ex.Message, LogLevel.Error);
                 return StatusCode(500);
             }
             return StatusCode(200);

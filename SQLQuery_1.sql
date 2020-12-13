@@ -78,3 +78,17 @@ INSERT INTO [UkkariInfoMaster] VALUES ('Critical', 'A Handle is stolen')
 SELECT * FROM [Vehicle]
   INNER JOIN [Owner]
      ON [Vehicle].OwnerId = [Owner].Id
+
+
+
+
+CREATE TABLE Location
+(   
+    DateTime VARCHAR(30),
+    TransactionId VARCHAR(50),
+    VehicleId VARCHAR(20),
+    Address VARCHAR(20),
+    City VARCHAR(20)
+);
+
+

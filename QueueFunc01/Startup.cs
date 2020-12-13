@@ -1,7 +1,6 @@
 ﻿using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Kafka;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.ApplicationInsights.Channel;
@@ -10,6 +9,9 @@ using CommonLibrary.Storage;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
 using System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using QueueFunc01.Context;
 
 /* Server Telemetry Channel用
 using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
@@ -17,9 +19,9 @@ using Microsoft.ApplicationInsights.Extensibility.Implementation.Tracing;
 using Microsoft.ApplicationInsights.Extensibility;
 */
 
-[assembly: FunctionsStartup(typeof(AksPocSampleFunctions.Startup))]
+[assembly: FunctionsStartup(typeof(QueueFunc01.Startup))]
 
-namespace AksPocSampleFunctions
+namespace QueueFunc01
 {
     public class Startup : FunctionsStartup
     {
@@ -39,24 +41,13 @@ namespace AksPocSampleFunctions
                 .Build();
         }
 
-       
+
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            builder.Services.AddWebJobs(x => { return; }).AddKafka(
-                (KafkaOptions options) =>{
-                    options.MaxBatchSize = builder.GetContext().Configuration.GetValue<int>("KafkaExtension_MaxBatchSize");
-                    options.SubscriberIntervalInSeconds = builder.GetContext().Configuration.GetValue<int>("KafkaExtension_SubscriberIntervalInSeconds");
-                    options.ExecutorChannelCapacity = builder.GetContext().Configuration.GetValue<int>("KafkaExtension_ExecutorChannelCapacity");
-                    options.ChannelFullRetryIntervalInMs = builder.GetContext().Configuration.GetValue<int>("KafkaExtension_ChannelFullRetryIntervalInMs");
-                    if (!String.IsNullOrEmpty(builder.GetContext().Configuration.GetValue<string>("Librd_LibkafkaDebug")))
-                    {
-                        options.LibkafkaDebug = builder.GetContext().Configuration.GetValue<string>("Librd_LibkafkaDebug");
-                    }
-                });
-
             string appInsightsKey = builder.GetContext().Configuration.GetValue<string>("ApplicationInsights_InstrumentationKey");
             string logLevel = builder.GetContext().Configuration.GetValue<string>("Log_Level");
 
+            DbContextOptionsBuilder dbContextOptionsBuilder;
 
             // IFunctionsConfigurationBuilderを別クラスのメソッドで初期化する。
             // ServerTelemetryChannelにするとログがでない。
@@ -65,14 +56,25 @@ namespace AksPocSampleFunctions
             builder = myILoggerProvider.Congfigure(builder, appInsightsKey, logLevel);
 
 
-            //builder.Services.AddApplicationInsightsTelemetry(aiOptions);
-　          builder.Services.AddSingleton<Functions>();
+            builder.Services.AddDbContext<DatabaseContext>(options =>
+            {
+                //var configuration = provider.GetRequiredService<IConfiguration>();
+                dbContextOptionsBuilder = options.UseSqlServer(builder.GetContext().Configuration.GetValue<string>("DB_ConnectionString"));
+            });
 
-            //worker service向け
-            //builder.Services.AddApplicationInsightsTelemetryWorkerService(telemetryConfigutaion);
+            /*
+            using (var scope = builder.Services.BuildServiceProvider().CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                dbContext.Database.EnsureCreated();
+            }
+            */
+
+
+            //builder.Services.AddApplicationInsightsTelemetry(aiOptions);
+            builder.Services.AddSingleton<Functions>();
             builder.Services.BuildServiceProvider(true);
 
-  
         }
     }
 }

@@ -19,7 +19,11 @@
             private static List<RootObject> accidentLists;
             private static int dataCountLimit = 100000;
             private static int maxDegreeOfParallelism = 1;
-            private static string jsonstr = "";
+            private static string accidentjsonstr = "";
+            private static string locationsjsonstr = "";
+            private static LocationList locationList = new LocationList();
+            //private static Location location = new Location();
+            //private static Location[] locations = new Location[10];
 
             static async Task Main(string[] args)
             {
@@ -74,7 +78,8 @@
                 ParallelOptions options = new ParallelOptions();
                 options.MaxDegreeOfParallelism = maxDegreeOfParallelism;
 
-
+                //Location[] locations = new Location[accidentLists[0].Accidents.Length];
+                
                 try
                 {
                     Parallel.For(0,
@@ -82,33 +87,54 @@
                         options,
                         async (int i, ParallelLoopState loopState) =>
                         {
+                            locationList.Locations = new List<Location>();
+                            Location location = new Location();
                             System.Threading.Thread.Sleep(100);
                             var k = rand1.Next(0, 50000);
                             var n = rand2.Next(0, 19);
                             lock (lockobject)
                             {
                                 accidentLists[k].dateTime = DateTime.UtcNow.ToString("yyyy-MM-ddThh:mm:ssZ");
+
                                 foreach (Accident_ a in accidentLists[k].Accidents)
                                 {
                                     a.Message = messageList[rand2.Next(0, 19)];
-                                    a.OccurenceDate = DateTime.UtcNow.ToString("yyyy-MM-ddThh:mm:ssZ");
+
+                                    // Create Location Data
+                                    location.DateTime = a.OccurenceDate = DateTime.UtcNow.ToString("yyyy-MM-ddThh:mm:ssZ");
+                                    location.TransactionId = a.TransactionId;
+                                    location.VehicleId = a.VehicleId;
+                                    location.City = a.City;
+                                    location.Address = a.Address;
+                                    locationList.Locations.Add(location);
                                 }
-                                jsonstr = JsonConvert.SerializeObject(accidentLists[k]);
-                        
+                                
+                                accidentjsonstr = JsonConvert.SerializeObject(accidentLists[k]);
+                                locationsjsonstr = JsonConvert.SerializeObject(locationList);
+
+                                //
+                                Console.WriteLine(accidentjsonstr);
+                                Console.WriteLine(locationsjsonstr);
                             }
                             //Console.WriteLine(jsonstr);
 
                             try
                             {
-                                var content = new StringContent(jsonstr, Encoding.UTF8, "application/json");
-                                var result = await client.PostAsync("http://localhost/api/AccidentList", content);
-                                Console.WriteLine(@"time: {0}, statusCode: {1}", accidentLists[k].dateTime, (int)result.StatusCode);
+                                //var content = new StringContent(accidentjsonstr, Encoding.UTF8, "application/json");
+                                //var result = await client.PostAsync("http://localhost/api/AccidentList", content);
+                                //Console.WriteLine(@"AccientListApi: time: {0}, statusCode: {1}", accidentLists[k].dateTime, (int)result.StatusCode);
+
+                                var content = new StringContent(locationsjsonstr, Encoding.UTF8, "application/json");
+                                var result = await client.PostAsync("http://localhost/api/LocationList", content);
+                                Console.WriteLine(@"LocationListApi: time: {0}, statusCode: {1}", accidentLists[k].dateTime, (int)result.StatusCode);
+
 
                                 //var response = result.Content.ReadAsStringAsync();
                                 //Console.WriteLine(response);
-                            }catch (Exception ex)
+                            }
+                            catch (Exception ex)
                             {
-                                Console.WriteLine(ex.Message);
+                                Console.WriteLine(ex.StackTrace);
                             }
 
                             i++;

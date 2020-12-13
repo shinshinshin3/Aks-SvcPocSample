@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.ApplicationInsights;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.ApplicationInsights;
 using CommonLibrary.Models;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Configuration;
@@ -15,33 +17,32 @@ using System.Threading;
 namespace GwWebApi01.Controllers
 {
     [Route("api/[controller]")]
-    public class AccidentListController : ControllerBase
+    public class LocationListController : ControllerBase
     {
+
         private IConfiguration _configuration;
-        private TelemetryClient _telemetryClient;
         private ILogger _logger;
 
         private string brokerList = "";
         private string topic = "";
 
-        public AccidentListController(IConfiguration configuraion, TelemetryClient telemetryClient, ILogger<AccidentListController> logger)
+        public LocationListController(IConfiguration configuraion, ILogger<AccidentListController> logger)
         {
-            _telemetryClient = telemetryClient;
             _configuration = configuraion;
             _logger = logger;
 
             brokerList = _configuration.GetValue<string>("BROKER_LIST");
-            topic = _configuration.GetValue<string>("TOPIC_ACCIDENT");
+            topic = _configuration.GetValue<string>("TOPIC_LOCATION");
         }
 
-        // POST api/AccidentList
+        // POST api/LocationList
         [HttpPost]
-        public async Task<StatusCodeResult> Post([FromBody]RootObject rootObject)
+        public async Task<StatusCodeResult> Post([FromBody] LocationList locationList)
         {
             //_telemetryClient.TrackTrace(rootObject.DateTime + ":" + rootObject.CountryCode);
             List<string> tList = new List<string>();
 
-            foreach(Accident i in rootObject.Accidents)
+            foreach (Location i in locationList.Locations)
             {
                 var guid = Guid.NewGuid().ToString();
                 i.TransactionId = guid;
@@ -53,7 +54,7 @@ namespace GwWebApi01.Controllers
             {
                 using (var kafkaClient = new MyKafkaProducer(brokerList, topic))
                 {
-                    var jstr = JsonConvert.SerializeObject(rootObject);
+                    var jstr = JsonConvert.SerializeObject(locationList);
                     //_telemetryClient.TrackTrace(jstr);
                     _logger.LogDebug(jstr, LogLevel.Debug);
                     //var dr = await kafkaClient.produceAsyncWithConnection(brokerList, topic, jstr);
@@ -63,7 +64,7 @@ namespace GwWebApi01.Controllers
                     var dr = await kafkaClient.produceAsync(jstr, cancellationTokenSource.Token);
                     _logger.LogInformation($"Delivered at '{dr.topicTimeStamp}' to topic '{dr.topic}' offset '{dr.offset}'", LogLevel.Information);
 
-                } 
+                }
             }
             catch (Exception ex)
             {
@@ -72,21 +73,6 @@ namespace GwWebApi01.Controllers
                 return StatusCode(500);
             }
             return StatusCode(200);
-        }
-
-        // Get api/AccidentList for probe request send by application gateway
-        [HttpGet]
-        public string Get()
-        {
-            try
-            {
-                //_logger.LogInformation("requet receive");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.InnerException.Message, LogLevel.Error);
-            }
-            return "api/AccidentList";
         }
     }
 }
