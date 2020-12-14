@@ -12,4 +12,8 @@ spec:
           backend:
             serviceName: aks-pocsvc-gwweb
             servicePort: 80
+        - path: /api/LocationList
+          backend:
+            serviceName: aks-pocsvc-gwweb
+            servicePort: 80
 

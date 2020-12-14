@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: aks-pocsvc-gwweb
-        image: funcregistry.azurecr.io/aks_pocsvc_gwwebapi:latest
+        image: funcregistry.azurecr.io/aks_pocsvc_gwwebapi:v0.9.1
         resources:
           requests:
             cpu: 300m
@@ -28,8 +28,10 @@ spec:
         env:
         - name: BROKER_LIST
           value: 10.0.1.5:9092
-        - name: TOPIC
+        - name: TOPIC_ACCIDENT
           value: accident
+        - name: TOPIC_LOCATION
+          value: location
         - name: ApplicationInsights_InstrumentationKey
           valueFrom:
             secretKeyRef:

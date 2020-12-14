@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: aks-pocsvc-beapp
-        image: funcregistry.azurecr.io/aks_pocsvc_bewebapi:latest
+        image: funcregistry.azurecr.io/aks_pocsvc_bewebapi:v0.9.0
         resources:
           requests:
             cpu: 100m
@@ -38,6 +38,9 @@ spec:
               key: ApplicationInsightsInstrumentationKey
         - name: Log_Level
           value: Information
+        # AAD Authenticdation Flag
+        - name: DB_AADEnabled
+          value: "true"
         volumeMounts:
         - name: secrets-store-inline
           mountPath: "/mnt/secrets-store"
