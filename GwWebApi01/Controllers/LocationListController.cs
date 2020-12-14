@@ -20,7 +20,7 @@ namespace GwWebApi01.Controllers
     public class LocationListController : ControllerBase
     {
 
-        private IConfiguration _configuration;
+        private IConfiguration _configuration;  
         private ILogger _logger;
 
         private string brokerList = "";
@@ -73,6 +73,20 @@ namespace GwWebApi01.Controllers
                 return StatusCode(500);
             }
             return StatusCode(200);
+        }
+
+        [HttpGet]
+        public string Get()
+        {
+            try
+            {
+                //_logger.LogInformation("requet receive");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.InnerException.Message, LogLevel.Error);
+            }
+            return "api/LocationList";
         }
     }
 }

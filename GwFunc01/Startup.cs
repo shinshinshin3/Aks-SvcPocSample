@@ -10,6 +10,7 @@ using CommonLibrary.Storage;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
 using System;
+using Microsoft.ApplicationInsights.Extensibility;
 
 /* Server Telemetry Channel用
 using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
@@ -60,8 +61,11 @@ namespace AksPocSampleFunctions
 
             // IFunctionsConfigurationBuilderを別クラスのメソッドで初期化する。
             // ServerTelemetryChannelにするとログがでない。
-            //builder = TelemetryClientConfigure.ConfigureFunctionsServerTelemetryChannel(builder, appInsightsKey);
-            builder = TelemetryClientConfigure.ConfigureFunctionsInMemoryTelemetryChannel(builder, appInsightsKey);
+
+            builder = TelemetryClientConfigure.ConfigureFunctionsServerTelemetryChannel(builder, appInsightsKey);
+            builder.Services.AddSingleton<ITelemetryInitializer, PodTelemetryInitializer>();
+
+            //builder = TelemetryClientConfigure.ConfigureFunctionsInMemoryTelemetryChannel(builder, appInsightsKey);
             builder = myILoggerProvider.Congfigure(builder, appInsightsKey, logLevel);
 
 

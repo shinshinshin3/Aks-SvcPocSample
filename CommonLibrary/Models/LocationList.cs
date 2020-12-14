@@ -16,7 +16,7 @@ namespace CommonLibrary.Models
     public class Location
     {
         public long Id { get; set; }
-        public string DateTime { get; set; }
+        public DateTime DateTime { get; set; }
         public string TransactionId { get; set; }
         public string VehicleId { get; set; }
         public string Address { get; set; }

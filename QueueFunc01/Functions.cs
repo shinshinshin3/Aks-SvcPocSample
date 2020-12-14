@@ -28,7 +28,7 @@ namespace QueueFunc01
         }
 
         [FunctionName("Functions")]
-        public async Task Run([QueueTrigger("%Queue_Name%", Connection = "Queue_ConnectionString")] string myQueueItem, QueueAttribute queueAttribute)
+        public async Task Run([QueueTrigger("%Queue_Name%", Connection = "Queue_ConnectionString")] string myQueueItem)
         {
             //Console.WriteLine(myQueueItem);
 
@@ -53,9 +53,9 @@ namespace QueueFunc01
 
             //var str = myQueueItem.TrimStart('"').Trim('\\').TrimEnd('"');
             var str = Regex.Unescape(myQueueItem).Trim();
-            str = str.Substring(1, str.Length - 2);
+            //str = str.Substring(1, str.Length - 2);
 
-            //Console.WriteLine(str);
+            Console.WriteLine(str);
 
             try
             {

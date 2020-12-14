@@ -9,7 +9,7 @@ using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
 using CommonLibrary.Logging;
 
 using BeWebApi01.Context;
-
+using Microsoft.ApplicationInsights.Extensibility;
 
 namespace BeWebApi01
 {
@@ -43,6 +43,7 @@ namespace BeWebApi01
 
             services = TelemetryClientConfigure.ConfigureServerTelemetryChannel(services, appInsightsKey);
             services = myILoggerProvider.Congfigure(services, appInsightsKey, logLevel);
+            services.AddSingleton<ITelemetryInitializer, PodTelemetryInitializer>();
 
             services.AddControllers();
             // DBコンテキストの登録。(テーブルがなければ作成する。) 

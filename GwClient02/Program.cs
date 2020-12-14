@@ -70,7 +70,7 @@ namespace GwClient02
                     options,
                     async (int i, ParallelLoopState loopState) =>
                     {
-                        System.Threading.Thread.Sleep(300);
+                        System.Threading.Thread.Sleep(100);
 
                         var k = rand.Next(0, 50000);
 
@@ -111,7 +111,7 @@ namespace GwClient02
 
                         var accidentContent = new StringContent(accidentjsonstr, Encoding.UTF8, "application/json");
                         var accidentResult = await client.PostAsync("http://localhost/api/AccidentList", accidentContent);
-                        Console.WriteLine(@"AccientListApi: time: {0}, statusCode: {1}", accidentList.dateTime, (int)accidentResult.StatusCode);
+                        Console.WriteLine(@"AccidentListApi: time: {0}, statusCode: {1}", accidentList.dateTime, (int)accidentResult.StatusCode);
 
                         var locationContent = new StringContent(locationsjsonstr, Encoding.UTF8, "application/json");
                         var locationResult = await client.PostAsync("http://localhost/api/LocationList", locationContent);

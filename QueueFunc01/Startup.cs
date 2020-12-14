@@ -12,6 +12,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using QueueFunc01.Context;
+using Microsoft.ApplicationInsights.Extensibility;
 
 /* Server Telemetry Channel用
 using Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel;
@@ -51,8 +52,10 @@ namespace QueueFunc01
 
             // IFunctionsConfigurationBuilderを別クラスのメソッドで初期化する。
             // ServerTelemetryChannelにするとログがでない。
-            //builder = TelemetryClientConfigure.ConfigureFunctionsServerTelemetryChannel(builder, appInsightsKey);
-            builder = TelemetryClientConfigure.ConfigureFunctionsInMemoryTelemetryChannel(builder, appInsightsKey);
+            builder = TelemetryClientConfigure.ConfigureFunctionsServerTelemetryChannel(builder, appInsightsKey);
+            //builder = TelemetryClientConfigure.ConfigureFunctionsInMemoryTelemetryChannel(builder, appInsightsKey);
+
+            builder.Services.AddSingleton<ITelemetryInitializer, PodTelemetryInitializer>();
             builder = myILoggerProvider.Congfigure(builder, appInsightsKey, logLevel);
 
 
